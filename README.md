@@ -32,10 +32,12 @@ I actually don't use `oh-my-zsh` so if you want to use the vanilla zsh you can j
 
 and in your `~.zshrc` put thing like this :
 
-> typeset -U fpath
-> fpath=(~/.zsh/oc $fpath)
-> autoload -U compinit
-> compinit -i
+```bash
+typeset -U fpath
+fpath=(~/.zsh/oc $fpath)
+autoload -U compinit
+compinit -i
+```
 
 ## Author
 
