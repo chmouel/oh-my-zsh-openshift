@@ -1,0 +1,143 @@
+#compdef oc
+
+__oc_top_commands() {
+    local rets
+    rets=(login logout project new-project new-app status start-build
+      cancel-build build-logs deploy rollback env expose get describe create
+      process edit update delete logs exec port-forward proxy version config
+      volume resize stop label help)
+    compadd $rets
+}
+
+__oc_types () {
+    local rets
+    rets=(persistentVolumeClaims pvc
+          persistentVolumes pv pods nodes build rc replicationcontrollers
+          deploymentConfigs buildConfigs imageStreams
+          imageStreamTags imageStreamImages route project
+          service options template)
+    compadd $rets
+}
+
+__oc_contexts () {
+    local rets
+    rets=($(oc config -o json view| \
+                   python -c 'import json, sys;json = json.loads(sys.stdin.read());print " ".join([v["name"] for v in json["contexts"]])'))
+    compadd $rets
+}
+
+__oc_get () { compadd $(oc get $1|sed '1d'|grep "$2"|awk '{print $1}')}
+__oc_pods () { __oc_get pods}
+__oc_pods_running () { __oc_get pods Running}
+__oc_build () { __oc_get build }
+__oc_build_configs () { __oc_get bc }
+__oc_deployment_configs () { __oc_get dc }
+__oc_project () {__oc_get project }
+__oc_route () {__oc_get route }
+
+__oc_subcommand () {
+    case "$words[1]" in
+        (exec)
+            _arguments -C -s -S -A "-*" \
+                {-p,--pod}"[Pod name]:pod:__oc_pods_running" \
+                {-i,--stdin}"[Pass stdin to the container]" \
+                {-t,--tty}"[Stdin is a TTY]" \
+                '*::arguments: _normal'
+            ;;
+        (config)
+            _arguments \
+                '1: :(view use-context)'
+            ;;
+        (create)
+            _arguments \
+                {-h,--help}"[show help]" \
+                {-f,--file=}"[template file]:filename:_files"
+            ;;
+        (get)
+            _arguments \
+                {-o,--ouput}"[output]:output:(json yaml)" \
+                {-h,--help}"[show help]" \
+                ':octypes:__oc_types'
+            ;;
+        (delete|describe|edit|volume)
+            _arguments \
+                {-h,--help}"[show help]" \
+                ':octypes:__oc_types'
+            ;;
+        (start-build)
+            _arguments '1:ocbuild:__oc_build_configs'
+            ;;
+        (cancel-build|build-logs)
+            _arguments '1:ocbuild:__oc_build'
+            ;;
+        (logs)
+            _arguments '1:ocrunning:__oc_pods'
+            ;;
+        (project)
+            _arguments '1:ocrunning:__oc_project'
+            ;;
+        (help)
+            _arguments \
+                ':vmoc_command:__oc_top_commands'
+            ;;
+         (*)
+             _message 'Unkown sub command'
+    esac
+
+    case "$words[2]" in
+        (build|builds) __oc_build;;
+        (route|routes) __oc_route;;
+        (use-context) __oc_contexts;;
+        (project|projects) __oc_project;;
+        (pod|pods) __oc_pods ;;
+        (bc|buildConfigs|buildConfig) __oc_build_configs ;;
+        (dc|deploymentConfigs|deploymentConfig) __oc_deployment_configs;;
+    esac
+
+}
+
+_oc () {
+    local curcontext="$curcontext" state common_options
+    common_options=(
+        '--alsologtostderr=[log to standard error as well as files]:log also to stderr:(true false)'
+        '--api-version=[The API version to use when talking to the server]:api version:'
+        '--certificate-authority=[Path to a cert. file for the certificate authority.]:certa auth:_files'
+        '--client-certificate=[Path to a client cert file for TLS.]:client cert:_files'
+        '--client-key=[Path to a client key file for TLS.]:client key:_files'
+        '--cluster=[The name of the kubeconfig cluster to use]:cluster:'
+        '--config=[Path to the config file to use for CLI requests.]:config file:_files'
+        '--context=[The name of the kubeconfig context to use]:context:__oc_contexts'
+        '--google-json-key=[The Google Cloud Platform Service Account JSON Key to use for authentication.]:google json:'
+        '--httptest.serve=[if non-empty, httptest.NewServer serves on this address and blocks]:httptest:'
+        '--insecure-skip-tls-verify=[If use insecure HTTPS connections.]:insecure:(true false)'
+        '--log-backtrace-at=[when logging hits line file:N, emit a stack trace]:log backtrace:'
+        '--log-dir=[If non-empty, write log files in this directory]:log dir:_directories'
+        '--log-flush-frequency=[Maximum number of seconds between log flushes]:log flush:'
+        '--loglevel=[Set the level of log output (0-5)]:loglevel:(0 1 2 3 4 5)'
+        '--logtostderr=[log to standard error instead of files]:log to stderr:(true false)'
+        '--match-server-version=[Require server version to match client version]:match version:(true false)'
+        {-n,--namespace}'[If present, the namespace scope for this CLI request.]:namespace:__oc_project'
+        '--server=[The address and port of the Kubernetes API server]:server:'
+        '--stderrthreshold=[logs at or above this threshold go to stderr]:stderr:'
+        '--token=[Bearer token for authentication to the API server.]:token:'
+        '--user=[The name of the kubeconfig user to use]:user:'
+        '--v=[log level for V logs]:'
+        '--validate=[If true, use a schema to validate the input before sending it]:validate:(true false)'
+        '--vmodule=[comma-separated list of pattern=N settings for file-filtered logging]:vmodule:')
+
+    _arguments -C \
+         ${common_options} \
+        '(-): :->command' \
+        '(-)*:: :->option-or-argument'
+    case $state in
+        (command)
+            __oc_top_commands
+            ;;
+        (option-or-argument)
+            curcontext=${curcontext%:*:*}:oc-$words[1]:
+            __oc_subcommand
+            ;;
+    esac
+}
+
+_oc "$@"
