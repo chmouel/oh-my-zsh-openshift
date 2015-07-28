@@ -18,7 +18,7 @@ https://github.com/robbyrussell/oh-my-zsh/#basic-installation
 
 and execute this :
 
-> $ git clone https://github.com/chmouel/oh-my-zsh-openshift ~/.oh-my-zsh/custom/oc
+> $ git clone https://github.com/chmouel/oh-my-zsh-openshift ~/.oh-my-zsh/custom/plugins/oc
 
 you can edit your ~/.zshrc and add `oc` to the `plugins` variable like for example :
 
