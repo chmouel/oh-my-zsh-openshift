@@ -28,9 +28,9 @@ you can edit your ~/.zshrc and add `oc` to the `plugins` variable like for examp
 
 I actually don't use `oh-my-zsh` so if you want to use the vanilla zsh you can just checkout this to a directory  like `~/.zsh/oc`  :
 
-> $ mkdir -p ~/.zsh/;git clone  git clone https://github.com/chmouel/oh-my-zsh-openshift ~/.zsh/oc
+> $ mkdir -p ~/.zsh/;git clone https://github.com/chmouel/oh-my-zsh-openshift ~/.zsh/oc
 
-and in your `~.zshrc` put thing like this :
+and in your `~/.zshrc` put thing like this :
 
 ```bash
 typeset -U fpath
