@@ -5,7 +5,7 @@ __oc_top_commands() {
     rets=(login logout project new-project new-app status start-build
       cancel-build build-logs deploy rollback env expose get describe create
       process edit update delete logs exec port-forward proxy version config
-      volume resize stop label help)
+      rsh volume resize stop label help)
     compadd $rets
 }
 
@@ -144,3 +144,7 @@ _oc () {
 }
 
 _oc "$@"
+
+# Local Variables:
+# mode: sh
+# End:
