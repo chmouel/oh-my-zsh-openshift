@@ -2,10 +2,11 @@
 
 __oc_top_commands() {
     local rets
-    rets=(login logout project new-project new-app status start-build types
-      cancel-build build-logs deploy rollback env expose get describe create
-      process edit update delete logs exec port-forward proxy version config
-      rsh volume resize stop label whoami help)
+    rets=(login logout project new-project new-app status start-build
+          types cancel-build build-logs deploy rollback env expose get
+          describe create process edit update delete logs exec port-forward
+          proxy version config rsh volume resize stop label whoami help
+          export)
     compadd $rets
 }
 
@@ -64,10 +65,11 @@ __oc_subcommand () {
                 {-h,--help}"[show help]" \
                 {-f,--file=}"[template file]:filename:_files"
             ;;
-        (get)
+        (get|export)
             _arguments \
-                {-o,--ouput}"[output]:output:(json yaml)" \
-                {-h,--help}"[show help]" \
+                {-o,--output}"[Output format]:output:(json yaml template templatefile wide)" \
+                {-h,--help}"[Show help]" \
+                "--all[Select all resources in the namespace of the specified resource types]" \
                 ':octypes:__oc_types'
             ;;
         (delete|describe|edit|volume)
