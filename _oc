@@ -35,6 +35,12 @@ __oc_deployment_configs () { __oc_get dc }
 __oc_project () {__oc_get project }
 __oc_route () {__oc_get route }
 
+__oc_avail_shell() {
+    rets=(/bin/zsh /bin/sh /bin/bash)
+    [[ -e /etc/shells ]] && rets=(${(Z+Cn+)"$(</etc/shells)"})
+    compadd $rets
+}
+
 __oc_subcommand () {
     case "$words[1]" in
         (exec)
@@ -71,7 +77,10 @@ __oc_subcommand () {
             _arguments '1:ocbuild:__oc_build'
             ;;
         (rsh)
-            _arguments '1:ocrunning:__oc_pods_running'
+            _arguments -C -s -S -A "-*" \
+                {-h,--help}"[show help]" \
+                {-s,--shell}"[shell]:shells:__oc_avail_shell" \
+                ':ocrunning:__oc_pods_running'
             ;;
         (logs)
             _arguments '1:ocrunning:__oc_pods'
