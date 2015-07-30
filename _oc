@@ -41,6 +41,11 @@ __oc_avail_shell() {
     compadd $rets
 }
 
+_oc_hosts_default_port() {
+    # NOTE(chmou): 8443 should prob need to be a variable
+    _combination -s '[@:]' '' users-hosts hosts -S ":8443 " "$@" -
+}
+
 __oc_subcommand () {
     case "$words[1]" in
         (exec)
@@ -81,6 +86,13 @@ __oc_subcommand () {
                 {-h,--help}"[show help]" \
                 {-s,--shell}"[shell]:shells:__oc_avail_shell" \
                 ':ocrunning:__oc_pods_running'
+            ;;
+        (login)
+            _arguments -C -s -S -A "-*" \
+                {-u,--user}"[Username, will prompt if not provided]:users:_users" \
+                {-p,--password}"[Password, will prompt if not provided]:password:" \
+                {-h,--help}"[show help]" \
+                ':host_port:_oc_hosts_default_port'
             ;;
         (logs)
             _arguments '1:ocrunning:__oc_pods'
