@@ -2,7 +2,7 @@
 
 __oc_top_commands() {
     local rets
-    rets=(login logout project new-project new-app status start-build
+    rets=(login logout project new-project new-app status start-build types
       cancel-build build-logs deploy rollback env expose get describe create
       process edit update delete logs exec port-forward proxy version config
       rsh volume resize stop label help)
