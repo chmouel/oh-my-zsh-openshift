@@ -97,6 +97,11 @@ __oc_subcommand () {
         (logs)
             _arguments '1:ocrunning:__oc_pods'
             ;;
+        (new-project)
+            _arguments \
+                "--description=[Project description]:description:" \
+                "--display-name=[Project display name]:displayname:"
+            ;;
         (project)
             _arguments '1:ocrunning:__oc_project'
             ;;
