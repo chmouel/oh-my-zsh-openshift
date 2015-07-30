@@ -5,7 +5,7 @@ __oc_top_commands() {
     rets=(login logout project new-project new-app status start-build types
       cancel-build build-logs deploy rollback env expose get describe create
       process edit update delete logs exec port-forward proxy version config
-      rsh volume resize stop label help)
+      rsh volume resize stop label whoami help)
     compadd $rets
 }
 
@@ -104,6 +104,11 @@ __oc_subcommand () {
             ;;
         (project)
             _arguments '1:ocrunning:__oc_project'
+            ;;
+        (whoami)
+            _arguments \
+                {-c,--context}"[Print the current user context name]::" \
+                {-t,--token}"[Print the token the current session is using]::"
             ;;
         (help)
             _arguments \
