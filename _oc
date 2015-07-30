@@ -70,6 +70,9 @@ __oc_subcommand () {
         (cancel-build|build-logs)
             _arguments '1:ocbuild:__oc_build'
             ;;
+        (rsh)
+            _arguments '1:ocrunning:__oc_pods_running'
+            ;;
         (logs)
             _arguments '1:ocrunning:__oc_pods'
             ;;
