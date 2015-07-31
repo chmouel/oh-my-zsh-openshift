@@ -29,7 +29,7 @@ __oc_contexts () {
                  --template='{{$dot := .}}{{range $element := (index $dot "contexts")}}{{ .name }} {{end}}')
 }
 
-__oc_get () { compadd $(oc get $1|sed '1d'|grep "$2"|awk '{print $1}')}
+__oc_get () { compadd $(oc get $1 -o template --template='{{range.items}}{{.metadata.name}} {{end}}')}
 __oc_pods () { __oc_get pods}
 __oc_pods_running () { __oc_get pods Running}
 __oc_build () { __oc_get build }
