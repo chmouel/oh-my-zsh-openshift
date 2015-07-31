@@ -53,7 +53,10 @@ _oc_hosts_default_port() {
 __oc_subcommand () {
     case "$words[1]" in
         (build-logs)
-            _arguments '1:ocbuild:__oc_build'
+            _arguments -C -s -S -A "-*" \
+                {-f, --follow}"[Specify whether logs should be followed; default is true]" \
+                {-w,--nowait"[Specify whether to return immediately without waiting for logs to be available; default is false]" \
+                '1:ocbuild:__oc_build'
             ;;
         (cancel-build)
             _arguments -C -s -S -A "-*" \
