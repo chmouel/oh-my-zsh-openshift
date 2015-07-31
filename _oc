@@ -56,7 +56,10 @@ __oc_subcommand () {
             _arguments '1:ocbuild:__oc_build'
             ;;
         (cancel-build)
-            _arguments '1:ocbuild:__oc_build'
+            _arguments -C -s -S -A "-*" \
+                "--dump-logs[Specify if the build logs for the cancelled build should be shown]" \
+                "--restart[Specify if a new build should be created after the current build is cancelled]" \
+                '1:ocbuild:__oc_build'
             ;;
         (config)
             _arguments \
