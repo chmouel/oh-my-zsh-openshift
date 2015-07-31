@@ -25,10 +25,8 @@ __oc_types () {
 }
 
 __oc_contexts () {
-    local rets
-    rets=($(oc config -o json view| \
-                   python -c 'import json, sys;json = json.loads(sys.stdin.read());print " ".join([v["name"] for v in json["contexts"]])'))
-    compadd $rets
+    compadd $(oc config view -o template \
+                 --template='{{$dot := .}}{{range $element := (index $dot "contexts")}}{{ .name }} {{end}}')
 }
 
 __oc_get () { compadd $(oc get $1|sed '1d'|grep "$2"|awk '{print $1}')}
