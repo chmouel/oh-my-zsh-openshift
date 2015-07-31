@@ -52,12 +52,11 @@ _oc_hosts_default_port() {
 
 __oc_subcommand () {
     case "$words[1]" in
-        (exec)
-            _arguments -C -s -S -A "-*" \
-                {-p,--pod}"[Pod name]:pod:__oc_pods_running" \
-                {-i,--stdin}"[Pass stdin to the container]" \
-                {-t,--tty}"[Stdin is a TTY]" \
-                '*::arguments: _normal'
+        (build-logs)
+            _arguments '1:ocbuild:__oc_build'
+            ;;
+        (cancel-build)
+            _arguments '1:ocbuild:__oc_build'
             ;;
         (config)
             _arguments \
@@ -66,6 +65,13 @@ __oc_subcommand () {
         (create)
             _arguments \
                 {-f,--file=}"[template file]:filename:_files"
+            ;;
+        (exec)
+            _arguments -C -s -S -A "-*" \
+                {-p,--pod}"[Pod name]:pod:__oc_pods_running" \
+                {-i,--stdin}"[Pass stdin to the container]" \
+                {-t,--tty}"[Stdin is a TTY]" \
+                '*::arguments: _normal'
             ;;
         (get|export)
             _arguments \
@@ -86,9 +92,6 @@ __oc_subcommand () {
                 "--git-repository=[The path to the git repository for post-receive; defaults to the current directory]:git-repo:_files -/" \
                 "--list-webhooks=[List the webhooks for the specified BuildConfig or build]:webhooks:(all generic github)" \
                 '1:ocbuild:__oc_build_configs'
-            ;;
-        (cancel-build|build-logs)
-            _arguments '1:ocbuild:__oc_build'
             ;;
         (rsh)
             _arguments -C -s -S -A "-*" \
