@@ -37,6 +37,7 @@ __oc_build_configs () { __oc_get bc }
 __oc_deployment_configs () { __oc_get dc }
 __oc_project () {__oc_get project }
 __oc_route () {__oc_get route }
+__oc_get_imageStream () {__oc_get is }
 
 __oc_avail_shell() {
     rets=(/bin/zsh /bin/sh /bin/bash)
@@ -95,6 +96,27 @@ __oc_subcommand () {
             ;;
         (logs)
             _arguments '1:ocrunning:__oc_pods'
+            ;;
+        (new-app)
+            _arguments -C \
+                "--code=[Source code to use to build this application]:code_path:_path_files -/" \
+                "--context-dir=[Context directory to be used for the build]:context_dir:_path_files -/" \
+                "--docker-image=[Name of a Docker image to include in the app]:docker_image:" \
+                {-e,--env}"[Specify key value pairs of environment variables to set into each container]:envs:" \
+                {-f,--file}"[Path to a template file to use for the app]:template_file:_files" \
+                {-i,--image-stream}"[Name of an image stream to use in the app]:image_stream:__oc_get_imageStream" \
+                "--insecure-registry[Insecure registry]" \
+                "--no-headers[When using the default output, don't print headers]" \
+                "--name=[Set name to use for generated application artifacts]:name:" \
+                $_oc_output_format \
+                "--output_template=[Template string or path to template file to use]:template:_files" \
+                "--output-version=[Output the formatted object with the given version]:output_version" \
+                {-p,--param}"[Specify a list of key value pairs to override]:params:" \
+                {-l,--label}"[Label to set in all resources for this application]:labels:" \
+                {-S,--search}"[Search for components that match the arguments provided and print the results]" \
+                "--strategy=[Specify the build strategy to use if you don't want to detect]:strategy:(docker source)" \
+                "--template=[Name of a stored template to use in the app]:stored_template:" \
+                ':path:_files'
             ;;
         (new-project)
             _arguments \
