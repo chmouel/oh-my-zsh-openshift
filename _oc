@@ -78,7 +78,14 @@ __oc_subcommand () {
                 ':octypes:__oc_types'
             ;;
         (start-build)
-            _arguments '1:ocbuild:__oc_build_configs'
+            _arguments -C -s -S -A "-*" \
+                "--follow[Start a build and watch its logs until it completes or fails]" \
+                "--from-build=[Specify the name of a build which should be re-run]:from-build:" \
+                "--from-webhook=[Specify a webhook URL for an existing BuildConfign to trigger]:from-webhook:" \
+                "--git-post-receive=[The contents of the post-receive hook to trigger a build]:" \
+                "--git-repository=[The path to the git repository for post-receive; defaults to the current directory]:git-repo:_files -/" \
+                "--list-webhooks=[List the webhooks for the specified BuildConfig or build]:webhooks:(all generic github)" \
+                '1:ocbuild:__oc_build_configs'
             ;;
         (cancel-build|build-logs)
             _arguments '1:ocbuild:__oc_build'
