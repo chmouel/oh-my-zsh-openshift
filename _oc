@@ -1,5 +1,9 @@
 #compdef oc
 
+_oc_output_format=(
+    {-o,--output}"[Output format]:output:(json yaml template templatefile wide)"
+)
+
 __oc_top_commands() {
     local rets
     rets=(login logout project new-project new-app status start-build
@@ -62,19 +66,16 @@ __oc_subcommand () {
             ;;
         (create)
             _arguments \
-                {-h,--help}"[show help]" \
                 {-f,--file=}"[template file]:filename:_files"
             ;;
         (get|export)
             _arguments \
-                {-o,--output}"[Output format]:output:(json yaml template templatefile wide)" \
-                {-h,--help}"[Show help]" \
+                $_oc_output_format \
                 "--all[Select all resources in the namespace of the specified resource types]" \
                 ':octypes:__oc_types'
             ;;
         (delete|describe|edit|volume)
             _arguments \
-                {-h,--help}"[show help]" \
                 ':octypes:__oc_types'
             ;;
         (start-build)
@@ -85,7 +86,6 @@ __oc_subcommand () {
             ;;
         (rsh)
             _arguments -C -s -S -A "-*" \
-                {-h,--help}"[show help]" \
                 {-s,--shell}"[shell]:shells:__oc_avail_shell" \
                 ':ocrunning:__oc_pods_running'
             ;;
@@ -93,7 +93,6 @@ __oc_subcommand () {
             _arguments \
                 {-u,--user}"[Username, will prompt if not provided]:users:_users" \
                 {-p,--password}"[Password, will prompt if not provided]:password:" \
-                {-h,--help}"[show help]" \
                 ':host_port:_oc_hosts_default_port'
             ;;
         (logs)
