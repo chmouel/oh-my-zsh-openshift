@@ -10,7 +10,7 @@ __oc_top_commands() {
           types cancel-build build-logs deploy rollback env expose get
           describe create process edit update delete logs exec port-forward
           proxy version config rsh volume resize stop label whoami help
-          export)
+          export secrets)
     compadd $rets
 }
 
@@ -18,7 +18,7 @@ __oc_types () {
     local rets
     rets=(persistentVolumeClaims pvc
           persistentVolumes pv pods nodes build rc replicationcontrollers
-          deploymentConfigs buildConfigs imageStreams
+          deploymentConfigs buildConfigs imageStreams secrets
           imageStreamTags imageStreamImages route project
           service options template)
     compadd $rets
@@ -142,6 +142,9 @@ __oc_subcommand () {
         (project)
             _arguments '1:ocrunning:__oc_project'
             ;;
+        (secrets)
+            _arguments '1:ocrunning:(new new-dockercfg add)' # TODO(chmouel): extend properly
+            ;;
         (status)
             _arguments \
                 "-o=[Output format]:output:(dot)" \
@@ -220,3 +223,4 @@ _oc "$@"
 # Local Variables:
 # mode: sh
 # End:
+# vim: ft=zsh
