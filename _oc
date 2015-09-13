@@ -82,7 +82,7 @@ __oc_subcommand () {
         (get|export)
             _arguments \
                 $_oc_output_format \
-                "--all[Select all resources in the namespace of the specified resource types]" \
+                "--all-namespaces[Select all resources in the namespace of the specified resource types]" \
                 ':octypes:__oc_types'
             ;;
         (delete|describe|edit|volume)
