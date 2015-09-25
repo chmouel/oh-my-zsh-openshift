@@ -38,6 +38,7 @@ __oc_deployment_configs () { __oc_get dc }
 __oc_project () {__oc_get project }
 __oc_route () {__oc_get route }
 __oc_get_imageStream () {__oc_get is }
+__oc_get_template () {__oc_get template }
 
 __oc_avail_shell() {
     rets=(/bin/zsh /bin/sh /bin/bash)
@@ -120,18 +121,21 @@ __oc_subcommand () {
                 "--docker-image=[Name of a Docker image to include in the app]:docker_image:" \
                 {-e,--env}"[Specify key value pairs of environment variables to set into each container]:envs:" \
                 {-f,--file}"[Path to a template file to use for the app]:template_file:_files" \
+                "--group=[Indicate components that should be grouped together as <comp1>+<comp2>]:group:" \
+                "--image=[Name of an image stream to use in the app. (deprecated)]:image:" \
                 {-i,--image-stream}"[Name of an image stream to use in the app]:image_stream:__oc_get_imageStream" \
                 "--insecure-registry[Insecure registry]" \
+                {-l,--label}"[Label to set in all resources for this application]:labels:" \
+                {-L, --list}"[List all local templates and image streams that can be used to create]:list:" \
                 "--no-headers[When using the default output, don't print headers]" \
                 "--name=[Set name to use for generated application artifacts]:name:" \
                 $_oc_output_format \
                 "--output_template=[Template string or path to template file to use]:template:_files" \
                 "--output-version=[Output the formatted object with the given version]:output_version" \
                 {-p,--param}"[Specify a list of key value pairs to override]:params:" \
-                {-l,--label}"[Label to set in all resources for this application]:labels:" \
                 {-S,--search}"[Search for components that match the arguments provided and print the results]" \
                 "--strategy=[Specify the build strategy to use if you don't want to detect]:strategy:(docker source)" \
-                "--template=[Name of a stored template to use in the app]:stored_template:" \
+                "--template=[Name of a stored template to use in the app]:stored_template:__oc_get_template" \
                 ':path:_files'
             ;;
         (new-project)
