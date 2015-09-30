@@ -87,6 +87,15 @@ __oc_subcommand () {
                 "--all-namespaces[Select all resources in the namespace of the specified resource types]" \
                 ':octypes:__oc_types'
             ;;
+        (deploy)
+            _arguments \
+                $_oc_output_format \
+                "--cancel[Cancel the in-progress deployment]" \
+                "--enable-triggers[Enables all image triggers for the deployment config]" \
+                "--latest[Start a new deployment now]" \
+                "--retry[etry the latest failed deployment.]" \
+                ':octypes:__oc_deployment_configs'
+        ;;
         (delete|describe|edit|volume)
             _arguments \
                 ':octypes:__oc_types'
