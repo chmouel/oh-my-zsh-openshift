@@ -185,6 +185,7 @@ __oc_subcommand () {
         (rc|replicationcontrollers|replicationControllers) __oc_get_replicationControllers ;;
         (bc|buildConfigs|buildConfig) __oc_build_configs ;;
         (dc|deploymentConfigs|deploymentConfig) __oc_deployment_configs;;
+        (template|templates) __oc_get_template;;
     esac
 
 }
