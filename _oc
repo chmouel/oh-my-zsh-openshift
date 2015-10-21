@@ -136,7 +136,7 @@ __oc_subcommand () {
                 {-i,--image-stream}"[Name of an image stream to use in the app]:image_stream:__oc_get_imageStream" \
                 "--insecure-registry[Insecure registry]" \
                 {-l,--label}"[Label to set in all resources for this application]:labels:" \
-                {-L, --list}"[List all local templates and image streams that can be used to create]:list:" \
+                {-L,--list}"[List all local templates and image streams that can be used to create]:list:" \
                 "--no-headers[When using the default output, don't print headers]" \
                 "--name=[Set name to use for generated application artifacts]:name:" \
                 $_oc_output_format \
