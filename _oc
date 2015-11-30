@@ -39,6 +39,7 @@ __oc_project () {__oc_get project }
 __oc_route () {__oc_get route }
 __oc_get_imageStream () {__oc_get is }
 __oc_get_template () {__oc_get template }
+__oc_get_secrets () {__oc_get secrets }
 __oc_get_replicationControllers () { __oc_get rc }
 
 __oc_avail_shell() {
@@ -183,6 +184,7 @@ __oc_subcommand () {
         (project|projects) __oc_project;;
         (pod|pods) __oc_pods ;;
         (rc|replicationcontrollers|replicationControllers) __oc_get_replicationControllers ;;
+        (secrets) __oc_get_secrets;;
         (bc|buildConfigs|buildConfig) __oc_build_configs ;;
         (dc|deploymentConfigs|deploymentConfig) __oc_deployment_configs;;
         (template|templates) __oc_get_template;;
