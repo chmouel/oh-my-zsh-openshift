@@ -20,7 +20,7 @@ __oc_types () {
           persistentVolumes pv pods nodes build rc replicationcontrollers
           deploymentConfigs buildConfigs imageStreams secrets
           imageStreamTags imageStreamImages route project
-          service options template)
+          service sa serviceAccounts options template)
     compadd $rets
 }
 
@@ -43,6 +43,7 @@ __oc_get_imageStream () {__oc_get is }
 __oc_get_template () {__oc_get template }
 __oc_get_secrets () {__oc_get secrets }
 __oc_get_replicationControllers () { __oc_get rc }
+__oc_get_serviceAccounts () { __oc_get sa }
 
 __oc_avail_shell() {
     rets=(/bin/zsh /bin/sh /bin/bash)
@@ -192,6 +193,7 @@ __oc_subcommand () {
         (bc|buildConfigs|buildConfig) __oc_build_configs ;;
         (dc|deploymentConfigs|deploymentConfig) __oc_deployment_configs;;
         (template|templates) __oc_get_template;;
+        (serviceAccounts|sa) __oc_get_serviceAccounts;;
     esac
 
 }
