@@ -18,7 +18,7 @@ __oc_types () {
     local rets
     rets=(persistentVolumeClaims pvc
           persistentVolumes pv pods nodes build rc replicationcontrollers
-          deploymentConfigs buildConfigs imageStreams secrets
+          dc deploymentConfigs buildConfigs imageStreams secrets
           imageStreamTags imageStreamImages route project
           service sa serviceAccounts options template)
     compadd $rets
