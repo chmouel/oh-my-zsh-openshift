@@ -196,6 +196,7 @@ __oc_subcommand () {
         (template|templates) __oc_get_template;;
         (serviceAccounts|sa) __oc_get_serviceAccounts;;
         (service) __oc_get_service;;
+        (is|imageStreams) __oc_get_imageStream;;
     esac
 
 }
