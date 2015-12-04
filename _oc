@@ -16,41 +16,51 @@ __oc_top_commands() {
     compadd $rets
 }
 
-__oc_types () {
+__oc_k8s_types () {
     local rets
     rets=(pods po
           replicationcontrollers rc
           daemonsets ds
           services svc
-          deploymentconfigs dc
-          buildconfigs bc
-          builds
-          routes
           events ev
-          projects
           secrets
-          imagestreams is
-          imagestreamtags istag
-          imagestreamimages isimage
           persistentvolumes pv
           persistentvolumeclaims pvc
-          policies
-          rolebindings
           limitranges limits
           resourcequotas quota
           nodes no
           namespaces ns
-          users
-          groups
           componentstatuses cs
           endpoints ep
           serviceaccounts sa
+          securitycontextconstraints scc)
+    compadd $rets
+}
+
+__oc_openshift_types () {
+    local rets
+    rets=(deploymentconfigs dc
+          buildconfigs bc
+          builds
+          routes
+          projects
+          imagestreams is
+          imagestreamtags istag
+          imagestreamimages isimage
+          policies
+          rolebindings
+          users
+          groups
           templates
           policybindings
           roles
-          securitycontextconstraints scc
           oauthclients)
     compadd $rets
+}
+
+__oc_types () {
+    __oc_k8s_types
+    __oc_openshift_types
 }
 
 __oc_contexts () {
@@ -58,9 +68,13 @@ __oc_contexts () {
                  --template='{{$dot := .}}{{range $element := (index $dot "contexts")}}{{ .name }} {{end}}')
 }
 
-__oc_get () { compadd $(oc get $1 -o template --template='{{range.items}}{{.metadata.name}} {{end}}')}
+__oc_expose_resources_types () { compadd "pod" "rc" "dc" "svc" }
+__oc_scale_resources_types () { compadd "rc" "dc" }
+__oc_get () { compadd $(oc get $1 $2 -o template --template='{{range.items}}{{.metadata.name}} {{end}}')}
 __oc_pods () { __oc_get pods}
-__oc_pods_running () { __oc_get pods Running}
+__oc_pods_running () { __oc_get pods }
+__oc_build_pods () { __oc_get pods "-l openshift.io/build.name" }
+__oc_deployed_pods () { __oc_get pods "-l deploymentconfig" }
 __oc_build () { __oc_get build }
 __oc_build_configs () { __oc_get bc }
 __oc_deployment_configs () { __oc_get dc }
@@ -104,9 +118,9 @@ __oc_subcommand () {
             _arguments \
                 '1: :(view use-context)'
             ;;
-        (create)
+        (create|replace|process)
             _arguments \
-                {-f,--file=}"[template file]:filename:_files"
+                {-f,--filename=}"[Filename, directory, or URL to file to use to create the resource]:filename:_files"
             ;;
         (exec)
             _arguments -C -s -S -A "-*" \
@@ -192,6 +206,37 @@ __oc_subcommand () {
             ;;
         (secrets)
             _arguments '1:ocrunning:(new new-dockercfg add)' # TODO(chmouel): extend properly
+            ;;
+        (import-image)
+            _arguments '1:ocrunning:__oc_get_imageStream'
+            ;;
+        (scale)
+            _arguments \
+                "--current-replicas=[Precondition for current size.]:current-replicas:" \
+                "--replicas=[The new desired number of replicas.]:replicas:" \
+                '1:ocscale:__oc_scale_resources_types'
+            ;;
+        (expose)
+            _arguments \
+                "--dry-run=[If true, only print the object that would be sent, without creating it.]:dry-run:" \
+                "--hostname=[Set a hostname for the new route]:hostname:" \
+                "--name=[The name for the newly created object.]:name:" \
+                "--port=[The port that the service should serve on. Copied from the resource being exposed, if unspecified]:port:" \
+                "--protocol=[The network protocol for the service to be created. Default is 'tcp'.]:protocol:" \
+                "--selector=[A label selector to use for this service. If empty (the default) infer the selector from the replication controller.]:selector:" \
+                "--session-affinity=[If non-empty, set the session affinity for the service to this; legal values: 'None', 'ClientIP']:session-affinity:" \
+                "--target-port=[Name or number for the port on the container that the service should direct traffic to. Optional.]:target-port:" \
+                "--type=[Type for this service: ClusterIP, NodePort, or LoadBalancer. Default is 'ClusterIP'.]:type:" \
+                '1:ocexpose:__oc_expose_resources_types'
+            ;;
+        (explain)
+            _arguments \
+                "--recursive=[Print the fields of fields (Currently only 1 level deep)]:recursive:" \
+                '1:ocexplain:__oc_k8s_types'
+            ;;
+        (port-forward)
+            _arguments \
+                '1:ocportforward:__oc_deployed_pods'
             ;;
         (status)
             _arguments \
