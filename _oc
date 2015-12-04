@@ -6,21 +6,50 @@ _oc_output_format=(
 
 __oc_top_commands() {
     local rets
-    rets=(login logout project new-project new-app status start-build
-          types cancel-build build-logs deploy rollback env expose get
-          describe create process edit update delete logs exec port-forward
-          proxy version config rsh volume resize stop label whoami help
-          export secrets)
+    rets=(types login new-project new-app status project
+          start-build build-logs deploy rollback new-build cancel-build import-image scale tag
+          get describe edit env volumes label annotate expose stop delete
+          explain logs rsh rsync exec port-forward proxy
+          create replace patch process export run attach policy secrets convert
+          logout config whoami
+          options version help)
     compadd $rets
 }
 
 __oc_types () {
     local rets
-    rets=(persistentVolumeClaims pvc
-          persistentVolumes pv pods nodes build rc replicationcontrollers
-          dc deploymentConfigs buildConfigs imageStreams secrets
-          imageStreamTags imageStreamImages route project
-          service sa serviceAccounts options template)
+    rets=(pods po
+          replicationcontrollers rc
+          daemonsets ds
+          services svc
+          deploymentconfigs dc
+          buildconfigs bc
+          builds
+          routes
+          events ev
+          projects
+          secrets
+          imagestreams is
+          imagestreamtags istag
+          imagestreamimages isimage
+          persistentvolumes pv
+          persistentvolumeclaims pvc
+          policies
+          rolebindings
+          limitranges limits
+          resourcequotas quota
+          nodes no
+          namespaces ns
+          users
+          groups
+          componentstatuses cs
+          endpoints ep
+          serviceaccounts sa
+          templates
+          policybindings
+          roles
+          securitycontextconstraints scc
+          oauthclients)
     compadd $rets
 }
 
@@ -182,21 +211,21 @@ __oc_subcommand () {
     esac
 
     case "$words[2]" in
+        (po|pod|pods) __oc_pods ;;
+        (rc|replicationcontrollers|replicationControllers) __oc_get_replicationControllers ;;
+        (svc|service|services) __oc_get_service;;
+        (dc|deploymentConfigs|deploymentConfig) __oc_deployment_configs;;
+        (bc|buildConfigs|buildConfig) __oc_build_configs ;;
         (build|builds) __oc_build;;
         (route|routes) __oc_route;;
-        (use-context) __oc_contexts;;
         (project|projects) __oc_project;;
-        (pod|pods) __oc_pods ;;
-        (rc|replicationcontrollers|replicationControllers) __oc_get_replicationControllers ;;
         (secrets) __oc_get_secrets;;
+        (is|imageStreams) __oc_get_imageStream;;
         (pv|persistentVolumes) __oc_get_persistentVolumes;;
         (pvc|persistentVolumeClaims) __oc_get_persistentVolumeClaims;;
-        (bc|buildConfigs|buildConfig) __oc_build_configs ;;
-        (dc|deploymentConfigs|deploymentConfig) __oc_deployment_configs;;
+        (sa|serviceAccounts) __oc_get_serviceAccounts;;
         (template|templates) __oc_get_template;;
-        (serviceAccounts|sa) __oc_get_serviceAccounts;;
-        (service) __oc_get_service;;
-        (is|imageStreams) __oc_get_imageStream;;
+        (use-context) __oc_contexts;;
     esac
 
 }
