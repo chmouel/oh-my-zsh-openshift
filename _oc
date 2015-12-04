@@ -190,12 +190,19 @@ __oc_subcommand () {
         (project)
             _arguments '1:ocrunning:__oc_project'
             ;;
+        (rsync)
+            _arguments -C \
+                {-c,--container}"[Container within the pod]::" \
+                "--delete=[Delete files not present in source]:delete_file:(true false)" \
+                {-q,--quiet=}"[Suppress non-error messages]:quiet:(true false)" \
+                "--strategy=[Specify which strategy to use for copy: rsync, rsync-daemon, or tar]::"
+            ;;
         (secrets)
             _arguments '1:ocrunning:(new new-dockercfg add)' # TODO(chmouel): extend properly
             ;;
         (status)
             _arguments \
-                "-o=[Output format]:output:(dot)" \
+                "-o=[Output format]:output:(dot)"
             ;;
         (whoami)
             _arguments \
