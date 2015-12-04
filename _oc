@@ -70,6 +70,8 @@ __oc_contexts () {
 
 __oc_expose_resources_types () { compadd "pod" "rc" "dc" "svc" }
 __oc_scale_resources_types () { compadd "rc" "dc" }
+__oc_containers () { compadd $(oc get pods -o template --template='{{range.items}}{{range .spec.containers}}{{.name}}
+{{end}}{{end}}' | sort | uniq | tr '\n' ' ') }
 __oc_get () { compadd $(oc get $1 $2 -o template --template='{{range.items}}{{.metadata.name}} {{end}}')}
 __oc_pods () { __oc_get pods}
 __oc_pods_running () { __oc_get pods }
@@ -170,7 +172,9 @@ __oc_subcommand () {
                 ':host_port:_oc_hosts_default_port'
             ;;
         (logs)
-            _arguments '1:ocrunning:__oc_pods'
+            _arguments \
+                {-c,--container}"[The container to use for printing its logs]:container:__oc_containers" \
+                '1:ocrunning:__oc_pods'
             ;;
         (new-app)
             _arguments -C \
