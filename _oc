@@ -58,30 +58,27 @@ __oc_top_commands() {
     _describe -t top-commands 'top commands' list
 }
 
-__oc_k8s_types () {
-    local rets
-    rets=(pods po
-          replicationcontrollers rc
-          daemonsets ds
-          services svc
-          events ev
-          secrets
-          persistentvolumes pv
-          persistentvolumeclaims pvc
-          limitranges limits
-          resourcequotas quota
-          nodes no
-          namespaces ns
-          componentstatuses cs
-          endpoints ep
-          serviceaccounts sa
-          securitycontextconstraints scc)
-    compadd $rets
-}
+__oc_types () {
+    local -a k8t ost
 
-__oc_openshift_types () {
-    local rets
-    rets=(deploymentconfigs dc
+    k8t=(pods po
+         replicationcontrollers rc
+         daemonsets ds
+         services svc
+         events ev
+         secrets
+         persistentvolumes pv
+         persistentvolumeclaims pvc
+         limitranges limits
+         resourcequotas quota
+         nodes no
+         namespaces ns
+         componentstatuses cs
+         endpoints ep
+         serviceaccounts sa
+         securitycontextconstraints scc)
+
+    ost=(deploymentconfigs dc
           buildconfigs bc
           builds
           routes
@@ -97,12 +94,10 @@ __oc_openshift_types () {
           policybindings
           roles
           oauthclients)
-    compadd $rets
-}
 
-__oc_types () {
-    __oc_k8s_types
-    __oc_openshift_types
+        _alternative \
+            'openshift_types:OpenShift Types:compadd -a ost' \
+            'kube_types:Kubernetes Types:compadd -a k8t'
 }
 
 __oc_contexts () {
