@@ -117,6 +117,9 @@ __pods_and_files() {
 
 __oc_subcommand () {
     case "$words[1]" in
+        (annotate)
+            _arguments '1: :__oc_types'
+            ;;
         (build-logs)
             _arguments -C -s -S -A "-*" \
                 {-f,--follow}"[Specify whether logs should be followed; default is true]" \
