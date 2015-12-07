@@ -102,6 +102,19 @@ _oc_hosts_default_port() {
     _combination -s '[@:]' '' users-hosts hosts -S ":8443 " "$@" -
 }
 
+__pods_and_files() {
+    if compset -P '*:'; then
+        _wanted users expl 'files' _files -S '' && ret=0
+    elif compset -S ':*'; then
+        _wanted hosts expl 'pods' __oc_pods_running && ret=0
+    else
+        _alternative \
+            'pods:remote pod:__oc_pods_running -r: -S:' \
+            'files:: _files'
+    fi
+
+}
+
 __oc_subcommand () {
     case "$words[1]" in
         (build-logs)
@@ -210,10 +223,12 @@ __oc_subcommand () {
             ;;
         (rsync)
             _arguments -C \
-                {-c,--container}"[Container within the pod]::" \
+                {-c,--container}"[Container within the pod]:running containers:__oc_containers" \
                 "--delete=[Delete files not present in source]:delete_file:(true false)" \
                 {-q,--quiet=}"[Suppress non-error messages]:quiet:(true false)" \
-                "--strategy=[Specify which strategy to use for copy: rsync, rsync-daemon, or tar]::"
+                "--strategy=[Specify which strategy to use for copy: rsync, rsync-daemon, or tar]::" \
+                '1:files:__pods_and_files' \
+                '2:files:__pods_and_files'
             ;;
         (secrets)
             _arguments '1:ocrunning:(new new-dockercfg add)' # TODO(chmouel): extend properly
