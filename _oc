@@ -5,15 +5,57 @@ _oc_output_format=(
 )
 
 __oc_top_commands() {
-    local rets
-    rets=(types login new-project new-app status project
-          start-build build-logs deploy rollback new-build cancel-build import-image scale tag
-          get describe edit env volumes label annotate expose stop delete
-          explain logs rsh rsync exec port-forward proxy
-          create replace patch process export run attach policy secrets convert
-          logout config whoami
-          options version help)
-    compadd $rets
+	local -a list
+    # oc help | grep -iv deprecated:|gsed -n "/Basic Command/,/Use .oc help/ { /^ / { s/^[ ]*//; p;; } ;}"|gsed -r "s/ +/:'/;s/$/'/;s/^/    /"|sort -n
+    list=(
+        annotate:'Update the annotations on a resource'
+        attach:'Attach to a running container.'
+        build-logs:'Show logs from a build'
+        cancel-build:'Cancel a pending or running build'
+        config:'Change configuration files for the client'
+        convert:'Convert config files between different API versions'
+        create:'Create a resource by filename or stdin'
+        delete:'Delete resources by filenames, stdin, resources and names, or by resources and label selector.'
+        deploy:'View, start, cancel, or retry a deployment'
+        describe:'Show details of a specific resource or group of resources'
+        edit:'Edit a resource on the server'
+        env:'Update the environment on a resource with a pod template'
+        exec:'Execute a command in a container.'
+        explain:'Documentation of resources.'
+        export:'Export resources so they can be used elsewhere'
+        expose:'Expose a replicated application as a service or route'
+        get:'Display one or many resources'
+        help:'Help about any command'
+        import-image:'Imports images from a Docker registry'
+        label:'Update the labels on a resource'
+        login:'Log in to a server'
+        logout:'End the current server session'
+        logs:'Print the logs for a resource.'
+        new-app:'Create a new application'
+        new-build:'Create a new build configuration'
+        new-project:'Request a new project'
+        patch:'Update field(s) of a resource by stdin.'
+        policy:'Manage authorization policy'
+        port-forward:'Forward one or more local ports to a pod.'
+        process:'Process a template into list of resources'
+        project:'Switch to another project'
+        proxy:'Run a proxy to the Kubernetes API server'
+        replace:'Replace a resource by filename or stdin.'
+        rollback:'Revert part of an application back to a previous deployment'
+        rsh:'Start a shell session in a pod'
+        rsync:'Copy files between local filesystem and a pod'
+        run:'Run a particular image on the cluster.'
+        scale:'Change the number of pods in a deployment'
+        secrets:'Manage secrets'
+        start-build:'Start a new build'
+        status:'Show an overview of the current project'
+        tag:'Tag existing images into image streams'
+        types:'An introduction to concepts and types'
+        version:'Display version'
+        volumes:'Update volume on a resource with a pod template'
+        whoami:'Return information about the current session'
+    )
+    _describe -t top-commands 'top commands' list
 }
 
 __oc_k8s_types () {
@@ -277,8 +319,8 @@ __oc_subcommand () {
                 {-t,--token}"[Print the token the current session is using]::"
             ;;
         (help)
-            _arguments \
-                ':vmoc_command:__oc_top_commands'
+		    _arguments \
+                ':top-commands:__oc_top_commands'
             ;;
          (*)
              _message 'Unkown sub command'
