@@ -289,7 +289,7 @@ __oc_subcommand () {
         (bc|buildConfigs|buildConfig) __oc_build_configs ;;
         (build|builds) __oc_build;;
         (route|routes) __oc_route;;
-        (project|projects) __oc_project;;
+        (project|projects|namespaces|namespace) __oc_project;;
         (secrets) __oc_get_secrets;;
         (is|imageStreams) __oc_get_imageStream;;
         (pv|persistentVolumes) __oc_get_persistentVolumes;;
