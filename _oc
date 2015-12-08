@@ -271,7 +271,7 @@ __oc_subcommand () {
                 '2:files:__pods_and_files'
             ;;
         (secrets)
-            _arguments '1:ocrunning:(new new-dockercfg add)' # TODO(chmouel): extend properly
+            _arguments '1:ocrunning:(new new-basicauth new-sshauth new-dockercfg add)' # TODO(chmouel): extend properly
             ;;
         (import-image)
             _arguments '1:ocrunning:__oc_get_imageStream'
