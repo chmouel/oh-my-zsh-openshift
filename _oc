@@ -105,8 +105,6 @@ __oc_contexts () {
                  --template='{{$dot := .}}{{range $element := (index $dot "contexts")}}{{ .name }} {{end}}')
 }
 
-__oc_expose_resources_types () { compadd "pod" "rc" "dc" "svc" }
-__oc_scale_resources_types () { compadd "rc" "dc" }
 __oc_containers () { compadd $(oc get pods -o template --template='{{range.items}}{{range .spec.containers}}{{.name}}
 {{end}}{{end}}' | sort | uniq | tr '\n' ' ') }
 __oc_get () { compadd $(oc get $1 $2 -o template --template='{{range.items}}{{.metadata.name}} {{end}}')}
@@ -280,7 +278,7 @@ __oc_subcommand () {
             _arguments \
                 "--current-replicas=[Precondition for current size.]:current-replicas:" \
                 "--replicas=[The new desired number of replicas.]:replicas:" \
-                '1:ocscale:__oc_scale_resources_types'
+                '1:ocscale:(rc dc)'
             ;;
         (expose)
             _arguments \
@@ -293,7 +291,7 @@ __oc_subcommand () {
                 "--session-affinity=[If non-empty, set the session affinity for the service to this; legal values: 'None', 'ClientIP']:session-affinity:" \
                 "--target-port=[Name or number for the port on the container that the service should direct traffic to. Optional.]:target-port:" \
                 "--type=[Type for this service: ClusterIP, NodePort, or LoadBalancer. Default is 'ClusterIP'.]:type:" \
-                '1:ocexpose:__oc_expose_resources_types'
+                '1:ocexpose:(pod rc dc svc)'
             ;;
         (explain)
             _arguments \
