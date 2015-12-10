@@ -95,10 +95,16 @@ __oc_types () {
           roles
           oauthclients)
 
-        _alternative \
-            'openshift_types:OpenShift Types:compadd -a ost' \
-            'kube_types:Kubernetes Types:compadd -a k8t'
+    k8t_str="openshift_types:OpenShift Types:compadd -a k8t"
+    ost_str="openshift_types:OpenShift Types:compadd -a ost"
+    [[ $1 == "k8" ]] && astr=$k8t_str
+    [[ $1 == "os" ]] && astr=$ost_str
+    [[ -z $astr ]] && astr="$k8t_str $ost_str"
+
+    _alternative $astr
 }
+
+__oc_k8s_types() { __oc_types k8 ;}
 
 __oc_contexts () {
     compadd $(oc config view -o template \
