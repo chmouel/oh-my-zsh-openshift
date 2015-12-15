@@ -131,6 +131,7 @@ __oc_get_secrets () {__oc_get secrets }
 __oc_get_replicationControllers () { __oc_get rc }
 __oc_get_serviceAccounts () { __oc_get sa }
 __oc_get_service () { __oc_get service }
+__oc_get_node () { __oc_get node }
 
 __oc_avail_shell() {
     rets=(/bin/zsh /bin/sh /bin/bash)
@@ -340,6 +341,7 @@ __oc_subcommand () {
         (pvc|persistentVolumeClaims) __oc_get_persistentVolumeClaims;;
         (sa|serviceAccounts) __oc_get_serviceAccounts;;
         (template|templates) __oc_get_template;;
+        (no|node|nodes) __oc_get_node;;
         (use-context) __oc_contexts;;
     esac
 
