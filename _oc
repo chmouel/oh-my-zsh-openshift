@@ -122,16 +122,30 @@ __oc_build () { __oc_get build }
 __oc_build_configs () { __oc_get bc }
 __oc_deployment_configs () { __oc_get dc }
 __oc_project () {__oc_get project }
+__oc_namespace () {__oc_get ns }
 __oc_route () {__oc_get route }
 __oc_get_persistentVolumes () {__oc_get pv }
 __oc_get_persistentVolumeClaims () {__oc_get pvc }
 __oc_get_imageStream () {__oc_get is }
+__oc_get_imageStreamTags () { compadd $(oc get is -o template --template='{{range .items}}{{$is:=.metadata.name}}{{range .status.tags}}{{$is}}:{{.tag}} {{end}}{{end}}') }
+__oc_get_imageStreamImages () { compadd $(oc get is -o template --template='{{range .items}}{{$is:=.metadata.name}}{{range .status.tags}}{{range .items}}{{$is}}@{{.image}} {{end}}{{end}}{{end}}') }
 __oc_get_template () {__oc_get template }
 __oc_get_secrets () {__oc_get secrets }
 __oc_get_replicationControllers () { __oc_get rc }
 __oc_get_serviceAccounts () { __oc_get sa }
 __oc_get_service () { __oc_get service }
 __oc_get_node () { __oc_get node }
+__oc_get_policies () { __oc_get policies }
+__oc_get_rolebindings () { __oc_get rolebindings }
+__oc_get_limits () { __oc_get limits }
+__oc_get_quota () { __oc_get quota }
+__oc_get_users () { __oc_get users }
+__oc_get_groups () { __oc_get groups }
+__oc_get_endpoints () { __oc_get endpoints }
+__oc_get_securityContextConstraints () { __oc_get scc }
+__oc_get_policyBindings () { __oc_get policybindings }
+__oc_get_roles () { __oc_get roles }
+__oc_get_oauthclients () { __oc_get oauthclients }
 
 __oc_avail_shell() {
     rets=(/bin/zsh /bin/sh /bin/bash)
@@ -334,14 +348,28 @@ __oc_subcommand () {
         (bc|buildConfigs|buildConfig) __oc_build_configs ;;
         (build|builds) __oc_build;;
         (route|routes) __oc_route;;
-        (project|projects|namespaces|namespace) __oc_project;;
-        (secrets) __oc_get_secrets;;
+        (project|projects) __oc_project;;
+        (secret|secrets) __oc_get_secrets;;
         (is|imageStreams) __oc_get_imageStream;;
+        (istag|imageStreamTags) __oc_get_imageStreamTags;;
+        (isimage|imageStreamImages) __oc_get_imageStreamImages;;
         (pv|persistentVolumes) __oc_get_persistentVolumes;;
         (pvc|persistentVolumeClaims) __oc_get_persistentVolumeClaims;;
         (sa|serviceAccounts) __oc_get_serviceAccounts;;
         (template|templates) __oc_get_template;;
+        (policy|policies) __oc_get_policies;;
+        (rolebinding|rolebindings) __oc_get_rolebindings;;
+        (limits|limitranges) __oc_get_limits;;
+        (quota|resourcequotas) __oc_get_quota;;
         (no|node|nodes) __oc_get_node;;
+        (ns|namespace|namespaces) __oc_namespace;;
+        (user|users) __oc_get_users;;
+        (group|groups) __oc_get_groups;;
+        (ep|endpoint|endpoints) __oc_get_endpoints;;
+        (scc|securitycontextconstraints) __oc_get_securityContextConstraints;;
+        (policybindings|policybindingss) __oc_get_policyBindings;;
+        (role|roles) __oc_get_roles;;
+        (oauthclient|oauthclients) __oc_get_oauthclients;;
         (use-context) __oc_contexts;;
     esac
 
