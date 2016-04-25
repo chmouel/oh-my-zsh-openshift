@@ -83,17 +83,26 @@ __oc_types () {
           builds
           routes
           projects
+          images
           imagestreams is
           imagestreamtags istag
           imagestreamimages isimage
-          policies
-          rolebindings
+          templates
           users
           groups
-          templates
+          identities
+          policies
           policybindings
           roles
-          oauthclients)
+          rolebindings
+          clusterpolicies
+          clusterpolicybindings
+          clusterroles
+          clusterrolebindings
+          oauthclients
+          oauthaccesstokens
+          hostsubnets
+          clusternetworks)
 
     k8t_str="openshift_types:OpenShift Types:compadd -a k8t"
     ost_str="openshift_types:OpenShift Types:compadd -a ost"
@@ -146,6 +155,10 @@ __oc_get_securityContextConstraints () { __oc_get scc }
 __oc_get_policyBindings () { __oc_get policybindings }
 __oc_get_roles () { __oc_get roles }
 __oc_get_oauthclients () { __oc_get oauthclients }
+__oc_get_clusterpolicies () { __oc_get clusterpolicies }
+__oc_get_clusterpolicybindings () { __oc_get clusterpolicybindings }
+__oc_get_clusterroles () { __oc_get clusterroles }
+__oc_get_clusterrolebindings () { __oc_get clusterrolebindings }
 
 __oc_avail_shell() {
     rets=(/bin/zsh /bin/sh /bin/bash)
@@ -370,6 +383,10 @@ __oc_subcommand () {
         (policybindings|policybindingss) __oc_get_policyBindings;;
         (role|roles) __oc_get_roles;;
         (oauthclient|oauthclients) __oc_get_oauthclients;;
+        (clusterpolicy|clusterpolicies) __oc_get_clusterpolicies;;
+        (clusterpolicybinding|clusterpolicybindings) __oc_get_clusterpolicybindings;;
+        (clusterrole|clusterroles) __oc_get_clusterroles;;
+        (clusterrolebinding|clusterrolebindings) __oc_get_clusterrolebindings;;
         (use-context) __oc_contexts;;
     esac
 
