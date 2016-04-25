@@ -5,21 +5,22 @@ _oc_output_format=(
 )
 
 __oc_top_commands() {
-	local -a list
+    local -a list
     # oc help | grep -iv deprecated:|gsed -n "/Basic Command/,/Use .oc help/ { /^ / { s/^[ ]*//; p;; } ;}"|gsed -r "s/ +/:'/;s/$/'/;s/^/    /"|sort -n
     list=(
+        adm:'Tools for managing a cluster'
         annotate:'Update the annotations on a resource'
+        apply:'Apply a configuration to a resource by filename or stdin'
         attach:'Attach to a running container.'
-        build-logs:'Show logs from a build'
+        autoscale:'Autoscale a deployment config or replication controller'
         cancel-build:'Cancel a pending or running build'
         config:'Change configuration files for the client'
         convert:'Convert config files between different API versions'
         create:'Create a resource by filename or stdin'
-        delete:'Delete resources by filenames, stdin, resources and names, or by resources and label selector.'
+        delete:'Delete one or more resources'
         deploy:'View, start, cancel, or retry a deployment'
         describe:'Show details of a specific resource or group of resources'
         edit:'Edit a resource on the server'
-        env:'Update the environment on a resource with a pod template'
         exec:'Execute a command in a container.'
         explain:'Documentation of resources.'
         export:'Export resources so they can be used elsewhere'
@@ -34,7 +35,7 @@ __oc_top_commands() {
         new-app:'Create a new application'
         new-build:'Create a new build configuration'
         new-project:'Request a new project'
-        patch:'Update field(s) of a resource by stdin.'
+        patch:'Update field(s) of a resource using strategic merge patch.'
         policy:'Manage authorization policy'
         port-forward:'Forward one or more local ports to a pod.'
         process:'Process a template into list of resources'
@@ -47,15 +48,138 @@ __oc_top_commands() {
         run:'Run a particular image on the cluster.'
         scale:'Change the number of pods in a deployment'
         secrets:'Manage secrets'
+        set:'Commands that help set specific features on objects'
         start-build:'Start a new build'
         status:'Show an overview of the current project'
         tag:'Tag existing images into image streams'
         types:'An introduction to concepts and types'
         version:'Display version'
-        volumes:'Update volume on a resource with a pod template'
         whoami:'Return information about the current session'
     )
     _describe -t top-commands 'top commands' list
+}
+
+__oc_adm_top_commands() {
+    local -a list
+    # oc adm -h 2>&1 | grep -iv deprecated:|gsed -n "/Basic Command/,/Use .oc adm help/ { /^ / { s/^[ ]*//; p;; } ;}"|gsed -r "s/ +/:'/;s/$/'/;s/^/    /"|sort -n
+    list=(
+        build-chain:'Output the inputs and dependencies of your builds'
+        ca:'Manage certificates and keys'
+        config:'Change configuration files for the client'
+        create-api-client-config:'Create a config file for connecting to the server as a user'
+        create-bootstrap-policy-file:'Create the default bootstrap policy'
+        create-bootstrap-project-template:'Create a bootstrap project template'
+        create-error-template:'Create an error page template'
+        create-kubeconfig:'Create a basic .kubeconfig file from client certs'
+        create-login-template:'Create a login template'
+        create-node-config:'Create a configuration bundle for a node'
+        create-provider-selection-template:'Create a provider selection template'
+        groups:'Manage groups'
+        ipfailover:'Install an IP failover group to a set of nodes'
+        manage-node:'Manage nodes - list pods, evacuate, or mark ready'
+        new-project:'Create a new project'
+        overwrite-policy:'Reset the policy to the default values'
+        pod-network:'Manage pod network'
+        policy:'Manage policy'
+        prune:'Remove older versions of resources from the server'
+        registry:'Install the integrated Docker registry'
+        router:'Install a router'
+    )
+    _describe -t top-commands 'top commands' list
+}
+
+__oc_adm_policy_top_commands() {
+    local -a list
+    # oc adm policy -h 2>&1 | grep -iv deprecated:|gsed -n "/Discover/,/Use .oc adm policy help/ { /^ / { s/^[ ]*//; p;; } ;}"|gsed -r "s/ +/:'/;s/$/'/;s/^/    /"|sort -n
+    list=(
+        add-cluster-role-to-group:'Add groups to a role for all projects in the cluster'
+        add-cluster-role-to-user:'Add users to a role for all projects in the cluster'
+        add-role-to-group:'Add groups to a role in the current project'
+        add-role-to-user:'Add users or serviceaccounts to a role in the current project'
+        add-scc-to-group:'Add groups to a security context constraint'
+        add-scc-to-user:'Add users or serviceaccount to a security context constraint'
+        reconcile-cluster-role-bindings:'Replace cluster role bindings to match the recommended bootstrap policy'
+        reconcile-cluster-roles:'Replace cluster roles to match the recommended bootstrap policy'
+        reconcile-sccs:'Replace cluster SCCs to match the recommended bootstrap policy'
+        remove-cluster-role-from-group:'Remove group from role for all projects in the cluster'
+        remove-cluster-role-from-user:'Remove user from role for all projects in the cluster'
+        remove-group:'Remove group from the current project'
+        remove-role-from-group:'Remove group from role in the current project'
+        remove-role-from-user:'Remove user from role in the current project'
+        remove-scc-from-group:'Remove group from scc'
+        remove-scc-from-user:'Remove user from scc'
+        remove-user:'Remove user from the current project'
+        who-can:'List who can perform the specified action on a resource'
+    )
+    _describe -t top-commands 'top commands' list
+}
+
+__oc_resources() {
+    local -a kresources oresources
+    # curl -H "Authorization: Bearer XXXXX" https://openshift-master:8443/api/v1/ | jq '[.resources[].name]' | grep -iv '/' | gsed -r 's/ +"//;s/",$//;s/^/    /' | sort -n
+    kresources=(
+        bindings
+        componentstatuses
+        endpoints
+        events
+        limitranges
+        namespaces
+        nodes
+        persistentvolumeclaims
+        persistentvolumes
+        pods
+        podtemplates
+        replicationcontrollers
+        resourcequotas
+        secrets
+        securitycontextconstraints
+        serviceaccounts
+        services
+    )
+    # curl -H "Authorization: Bearer XXXXX" https://openshift-master:8443/oapi/v1/ | jq '[.resources[].name]' | grep -iv '/' | gsed -r 's/ +"//;s/",$//;s/^/    /' | sort -n
+    oresources=(
+        buildconfigs
+        builds
+        clusternetworks
+        clusterpolicies
+        clusterpolicybindings
+        clusterrolebindings
+        clusterroles
+        deploymentconfigrollbacks
+        deploymentconfigs
+        generatedeploymentconfigs
+        groups
+        hostsubnets
+        identities
+        images
+        imagestreamimages
+        imagestreamimports
+        imagestreammappings
+        imagestreams
+        imagestreamtags
+        localresourceaccessreviews
+        localsubjectaccessreviews
+        netnamespaces
+        oauthaccesstokens
+        oauthauthorizetokens
+        oauthclientauthorizations
+        oauthclients
+        policies
+        policybindings
+        processedtemplates
+        projectrequests
+        projects
+        resourceaccessreviews
+        rolebindings
+        roles
+        routes
+        subjectaccessreviews
+        templates
+        useridentitymappings
+        users
+    )
+    _describe -t kresources 'kubernetes resources' kresources
+    _describe -t oresources 'openshift resources' oresources
 }
 
 __oc_types () {
@@ -120,6 +244,10 @@ __oc_contexts () {
                  --template='{{$dot := .}}{{range $element := (index $dot "contexts")}}{{ .name }} {{end}}')
 }
 
+__oc_all_roles() {
+    __oc_get_clusterroles
+    __oc_get_roles
+}
 __oc_containers () { compadd $(oc get pods -o template --template='{{range.items}}{{range .spec.containers}}{{.name}}
 {{end}}{{end}}' | sort | uniq | tr '\n' ' ') }
 __oc_get () { compadd $(oc get $1 $2 -o template --template='{{range.items}}{{.metadata.name}} {{end}}')}
@@ -186,6 +314,21 @@ __pods_and_files() {
 
 __oc_subcommand () {
     case "$words[1]" in
+        (adm)
+            local curcontext="$curcontext" state
+            _arguments -C \
+                '(-): :->command' \
+                '(-)*:: :->option-or-argument'
+            case $state in
+                (command)
+                    __oc_adm_top_commands
+                    ;;
+                (option-or-argument)
+                    curcontext=${curcontext%:*:*}:oc-$words[1]:
+                    __oc_adm_subcommand
+                    ;;
+            esac
+            ;;
         (annotate)
             _arguments '1: :__oc_types'
             ;;
@@ -205,7 +348,7 @@ __oc_subcommand () {
             _arguments \
                 '1: :(view use-context)'
             ;;
-        (create|replace|process)
+        (apply|create|replace|process)
             _arguments \
                 {-f,--filename=}"[Filename, directory, or URL to file to use to create the resource]:filename:_files"
             ;;
@@ -390,6 +533,132 @@ __oc_subcommand () {
         (use-context) __oc_contexts;;
     esac
 
+}
+
+__oc_adm_subcommand () {
+    case "$words[1]" in
+        (new-project)
+            _arguments \
+                "--admin=[Project admin username]:user:__oc_get_users" \
+                "--admin-role=[Project admin role name in the cluster policy]:role:__oc_all_roles" \
+                "--description=[Project description]:description:" \
+                "--display-name=[Project display name]:display name:" \
+                "--node-selector=[Restrict pods onto nodes matching given label selector. Format: '<key1>=<value1>, <key2>=<value2>...'. Specifying \"\" means any node, not default. If unspecified, cluster default node selector will be used]:node selector:" \
+                '1:project:()'
+            ;;
+        (manage-node)
+            _arguments \
+                "--schedulable=[Control pod schedulability on the node]:schedulable:(true false)" \
+                "--evacuate=[Migrate all/selected pods on the node]:evacuate:(true false)" \
+                "--list-pods=[List all/selected pods on the node. Printer flags --output, etc. are only valid for this option.]:list:(true false)" \
+                '1:node:__oc_get_node'
+            ;;
+        (build-chain)
+            _arguments \
+                "--all=[Build dependency tree for the specified image stream tag across all namespaces]:all:(true false)" \
+                "--trigger-only=[If true, only include dependencies based on build triggers. If false, include all dependencies.]:evacuate:(true false)" \
+                '1:ist:__oc_get_imageStreamTags'
+            ;;
+        (groups)
+            local curcontext="$curcontext" state
+            _arguments -C \
+                '(-): :->command' \
+                '(-)*:: :->option-or-argument'
+            case $state in
+                (command)
+                    compadd "new" "add-users" "remove-users" "sync" "prune"
+                    ;;
+                (option-or-argument)
+                    curcontext=${curcontext%:*:*}:oc-$words[1]:
+                    __oc_adm_groups_subcommand
+                    ;;
+            esac
+            ;;
+        (policy)
+            local curcontext="$curcontext" state
+            _arguments -C \
+                '(-): :->command' \
+                '(-)*:: :->option-or-argument'
+            case $state in
+                (command)
+                    __oc_adm_policy_top_commands
+                    ;;
+                (option-or-argument)
+                    curcontext=${curcontext%:*:*}:oc-$words[1]:
+                    __oc_adm_policy_subcommand
+                    ;;
+            esac
+            ;;
+        (*)
+            _message 'Unkown sub command'
+    esac
+}
+
+__oc_adm_groups_subcommand () {
+    case "$words[1]" in
+        (new)
+            _arguments \
+                '1:group:()' \
+                '*:users:__oc_get_users'
+            ;;
+        (add-users|remove-user)
+            _arguments \
+                '1:group:__oc_get_groups' \
+                '*:users:__oc_get_users'
+            ;;
+    esac
+}
+
+__oc_adm_policy_subcommand () {
+    case "$words[1]" in
+        (add-role-to-group|remove-role-from-group)
+            _arguments \
+                '1:role:__oc_all_roles' \
+                '*:groups:__oc_get_groups'
+            ;;
+        (add-role-to-user|remove-role-from-user)
+            _arguments \
+                '1:role:__oc_all_roles' \
+                '*:users:__oc_get_users'
+            ;;
+        (add-cluster-role-to-group|remove-cluster-role-from-group)
+            _arguments \
+                '1:clusterrole:__oc_get_clusterroles' \
+                '*:groups:__oc_get_groups'
+            ;;
+        (add-cluster-role-to-user|remove-cluster-role-from-user)
+            _arguments \
+                '1:clusterrole:__oc_get_clusterroles' \
+                '*:users:__oc_get_users'
+            ;;
+        (add-scc-to-group|remove-scc-from-group)
+            _arguments \
+                '1:scc:__oc_get_securityContextConstraints' \
+                '*:groups:__oc_get_groups'
+            ;;
+        (add-scc-to-user|remove-scc-from-user)
+            _arguments \
+                {-z,--serviceaccount}"[service account in the current namespace to use as a user]:service account:__oc_get_serviceAccounts" \
+                '1:scc:__oc_get_securityContextConstraints' \
+                '*:users:__oc_get_users'
+            ;;
+        (remove-group)
+            _arguments \
+                '*:groups:__oc_get_groups'
+            ;;
+        (remove-user)
+            _arguments \
+                '*:users:__oc_get_users'
+            ;;
+        (who-can)
+            _arguments \
+                "--all-namespaces[If present, list who can perform the specified action in all namespaces.]" \
+                '1:verb:(get list create update delete deletecollection watch)' \
+                '2:resource:__oc_resources'
+            ;;
+        (*)
+            _message 'Unkown sub command'
+    esac
 }
 
 _oc () {
