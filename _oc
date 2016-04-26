@@ -17,6 +17,7 @@ __oc_top_commands() {
         config:'Change configuration files for the client'
         convert:'Convert config files between different API versions'
         create:'Create a resource by filename or stdin'
+        debug:'Launch a new instance of a pod for debugging'
         delete:'Delete one or more resources'
         deploy:'View, start, cancel, or retry a deployment'
         describe:'Show details of a specific resource or group of resources'
@@ -48,6 +49,7 @@ __oc_top_commands() {
         run:'Run a particular image on the cluster.'
         scale:'Change the number of pods in a deployment'
         secrets:'Manage secrets'
+        serviceaccounts:'Manage service accounts in your project.'
         set:'Commands that help set specific features on objects'
         start-build:'Start a new build'
         status:'Show an overview of the current project'
@@ -74,6 +76,7 @@ __oc_adm_top_commands() {
         create-login-template:'Create a login template'
         create-node-config:'Create a configuration bundle for a node'
         create-provider-selection-template:'Create a provider selection template'
+        diagnostics:'Diagnose common cluster problems'
         groups:'Manage groups'
         ipfailover:'Install an IP failover group to a set of nodes'
         manage-node:'Manage nodes - list pods, evacuate, or mark ready'
@@ -348,7 +351,12 @@ __oc_subcommand () {
             _arguments \
                 '1: :(view use-context)'
             ;;
-        (apply|create|replace|process)
+        (create)
+            _arguments \
+                {-f,--filename=}"[Filename, directory, or URL to file to use to create the resource]:filename:_files" \
+                '1:command:(namespace secret configmap serviceaccount route)'
+            ;;
+        (apply|replace|process)
             _arguments \
                 {-f,--filename=}"[Filename, directory, or URL to file to use to create the resource]:filename:_files"
             ;;
@@ -448,6 +456,11 @@ __oc_subcommand () {
         (secrets)
             _arguments '1:ocrunning:(new new-basicauth new-sshauth new-dockercfg add)' # TODO(chmouel): extend properly
             ;;
+        (serviceaccounts)
+            _arguments \
+                '1:command:(get-token new-token)' \
+                '2:service account:__oc_get_serviceAccounts'
+            ;;
         (import-image)
             _arguments '1:ocrunning:__oc_get_imageStream'
             ;;
@@ -537,6 +550,13 @@ __oc_subcommand () {
 
 __oc_adm_subcommand () {
     case "$words[1]" in
+        (diagnostics)
+            _arguments \
+                "--host=[Look for systemd and journald units even without master/node config]:host:(true false)" \
+                "--prevent-modification=[May be set to prevent diagnostics making any changes via the API]:preventmodif:(true false)" \
+                {-l,--diaglevel}'[Level of diagnostic output (0-4)]:diaglevel:((0\:"Debug" 1\:"Info" 2\:"Notice" 3\:"Warn" 4\:"Error"))' \
+                '*:diagnostic:(AnalyzeLogs ClusterRegistry ClusterRoleBindings ClusterRoles ClusterRouter ConfigContexts DiagnosticPod MasterConfigCheck MasterNode NodeConfigCheck NodeDefinitions UnitStatus)'
+            ;;
         (new-project)
             _arguments \
                 "--admin=[Project admin username]:user:__oc_get_users" \
