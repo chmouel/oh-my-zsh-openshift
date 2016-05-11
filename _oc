@@ -61,6 +61,19 @@ __oc_top_commands() {
     _describe -t top-commands 'top commands' list
 }
 
+__oc_set_commands() {
+    local -a list
+    #oc set -h 2>&1 | grep -iv deprecated:|gsed -n "/Configure application resources/,/Use .oc set COMMAND/ { /^ / { s/^[ ]*//; p;; } ;}"|gsed -r "s/ +/:'/;s/$/'/;s/^/    /"|sort -n
+    list=(
+        env:'Update environment variables on a pod template'
+        oc:'set COMMAND [options]'
+        probe:'Update a probe on a pod template'
+        triggers:'Update the triggers on a build or deployment config'
+        volumes:'Update volumes on a pod template'
+    )
+    _describe -t top-commands 'oc set commands' list
+}
+
 __oc_adm_top_commands() {
     local -a list
     # oc adm -h 2>&1 | grep -iv deprecated:|gsed -n "/Basic Command/,/Use .oc adm help/ { /^ / { s/^[ ]*//; p;; } ;}"|gsed -r "s/ +/:'/;s/$/'/;s/^/    /"|sort -n
@@ -329,6 +342,21 @@ __oc_subcommand () {
                 (option-or-argument)
                     curcontext=${curcontext%:*:*}:oc-$words[1]:
                     __oc_adm_subcommand
+                    ;;
+            esac
+            ;;
+        (set)
+            local curcontext="$curcontext" state
+            _arguments -C \
+                '(-): :->command' \
+                '(-)*:: :->option-or-argument'
+            case $state in
+                (command)
+                    __oc_set_commands
+                    ;;
+                (option-or-argument)
+                    curcontext=${curcontext%:*:*}:oc-$words[1]:
+                    #TODO(chmouel): Lazy b*
                     ;;
             esac
             ;;
