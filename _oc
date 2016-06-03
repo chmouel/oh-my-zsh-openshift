@@ -136,6 +136,7 @@ __oc_resources() {
     kresources=(
         bindings
         componentstatuses
+        configmaps
         endpoints
         events
         limitranges
@@ -207,6 +208,7 @@ __oc_types () {
          services svc
          events ev
          secrets
+         configmaps
          persistentvolumes pv
          persistentvolumeclaims pvc
          limitranges limits
@@ -284,6 +286,7 @@ __oc_get_imageStreamTags () { compadd $(oc get is -o template --template='{{rang
 __oc_get_imageStreamImages () { compadd $(oc get is -o template --template='{{range .items}}{{$is:=.metadata.name}}{{range .status.tags}}{{range .items}}{{$is}}@{{.image}} {{end}}{{end}}{{end}}') }
 __oc_get_template () {__oc_get template }
 __oc_get_secrets () {__oc_get secrets }
+__oc_get_configmaps () {__oc_get configmaps }
 __oc_get_replicationControllers () { __oc_get rc }
 __oc_get_serviceAccounts () { __oc_get sa }
 __oc_get_service () { __oc_get service }
@@ -547,6 +550,7 @@ __oc_subcommand () {
         (route|routes) __oc_route;;
         (project|projects) __oc_project;;
         (secret|secrets) __oc_get_secrets;;
+        (configmap|configmaps) __oc_get_configmaps;;
         (is|imageStreams) __oc_get_imageStream;;
         (istag|imageStreamTags) __oc_get_imageStreamTags;;
         (isimage|imageStreamImages) __oc_get_imageStreamImages;;
