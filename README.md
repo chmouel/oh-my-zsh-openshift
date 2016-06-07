@@ -42,6 +42,8 @@ compinit -i
 ## Author
 
 Chmouel Boudjnah <chmouel@chmouel.com>
+Vincent Behar <vincent@behar.name>
+
 
 ## License
 
