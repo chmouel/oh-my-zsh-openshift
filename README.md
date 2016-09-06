@@ -1,3 +1,5 @@
+**Note that lately zsh completion should work out of the box with openshift origin, you just have to do a ```source <(oc completion zsh)``` from your shell and it should give you completion. There is still things that this plugin do better in some cases but down the line the effort should be focused on improving the completion inside openshift-origin**
+
 ## Synopsis
 
 This is a `oh-my-zsh` plugin to provide shell completion of the OpenShift v3 commands with ZSH.
@@ -39,7 +41,7 @@ autoload -U compinit
 compinit -i
 ```
 
-## Author
+## Authors
 
 * Chmouel Boudjnah <chmouel@chmouel.com>
 * Vincent Behar <vincent@behar.name>
