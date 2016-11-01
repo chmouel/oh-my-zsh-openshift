@@ -434,7 +434,7 @@ __oc_subcommand () {
             ;;
         (login)
             _arguments \
-                {-u,--user}"[Username, will prompt if not provided]:users:_users" \
+                {-u,--username}"[Username, will prompt if not provided]:users:_users" \
                 {-p,--password}"[Password, will prompt if not provided]:password:" \
                 ':host_port:_oc_hosts_default_port'
             ;;
