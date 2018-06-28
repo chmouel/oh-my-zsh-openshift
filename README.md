@@ -32,10 +32,12 @@ I actually don't use `oh-my-zsh` so if you want to use the vanilla zsh you can j
 
 > $ mkdir -p ~/.zsh/;git clone https://github.com/chmouel/oh-my-zsh-openshift ~/.zsh/oc
 
-and in your `~/.zshrc` put thing like this :
+## Configure (after install both with and without oh-my-zsh)
+
+In your `~/.zshrc` put thing like this :
 
 ```bash
-typeset -U fpath
+typeset -U fpath  # Optinal for oh-my-zsh users
 fpath=(~/.zsh/oc $fpath)
 autoload -U compinit
 compinit -i
