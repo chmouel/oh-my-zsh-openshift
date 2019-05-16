@@ -440,6 +440,13 @@ __oc_subcommand () {
             ;;
         (logs)
             _arguments \
+				"--all-containers[Get all containerss logs in the pod(s)]" \
+				"--limit-bytes=[Maximum bytes of logs to return. Defaults to no limit.]:" \
+				"--pod-running-timeout=[The length of time (like 5s, 2m) to wait until at least one pod is running]:" \
+				{-l,--selector}="[Selector (label query) to filter on]" \
+				{-f,--follow}"[Specify if the logs should be streamed.]" \
+				"--tail=[Lines of recent log file to display]" \
+				{-p,--previous}"[Print the logs for the previous instance of the container in a pod if it exists.]" \
                 {-c,--container}"[The container to use for printing its logs]:container:__oc_containers" \
                 '1:ocrunning:__oc_pods'
             ;;
